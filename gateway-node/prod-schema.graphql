@@ -1,0 +1,131 @@
+schema
+  @link(url: "https://specs.apollo.dev/link/v1.0")
+  @link(url: "https://specs.apollo.dev/join/v0.3", for: EXECUTION)
+{
+  query: Query
+  mutation: Mutation
+}
+
+directive @join__enumValue(graph: join__Graph!) repeatable on ENUM_VALUE
+
+directive @join__field(graph: join__Graph, requires: join__FieldSet, provides: join__FieldSet, type: String, external: Boolean, override: String, usedOverridden: Boolean) repeatable on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
+
+directive @join__graph(name: String!, url: String!) on ENUM_VALUE
+
+directive @join__implements(graph: join__Graph!, interface: String!) repeatable on OBJECT | INTERFACE
+
+directive @join__type(graph: join__Graph!, key: join__FieldSet, extension: Boolean! = false, resolvable: Boolean! = true, isInterfaceObject: Boolean! = false) repeatable on OBJECT | INTERFACE | UNION | ENUM | INPUT_OBJECT | SCALAR
+
+directive @join__unionMember(graph: join__Graph!, member: String!) repeatable on UNION
+
+directive @link(url: String, as: String, for: link__Purpose, import: [link__Import]) repeatable on SCHEMA
+
+type AuthResponse
+  @join__type(graph: BUSINESS_NODE)
+  @join__type(graph: PROFILE_NODE)
+{
+  token: String!
+  user: User!
+}
+
+input CreateMachineLearningInput
+  @join__type(graph: BUSINESS_NODE)
+{
+  personalized: String!
+  userId: String!
+}
+
+scalar join__FieldSet
+
+enum join__Graph {
+  BUSINESS_NODE @join__graph(name: "business-node", url: "https://bhkxryxy00.execute-api.us-east-1.amazonaws.com/dev/graphql")
+  PROFILE_NODE @join__graph(name: "profile-node", url: "https://y2jcxfppeg.execute-api.us-east-1.amazonaws.com/dev/graphql")
+}
+
+scalar link__Import
+
+enum link__Purpose {
+  """
+  `SECURITY` features provide metadata necessary to securely resolve fields.
+  """
+  SECURITY
+
+  """
+  `EXECUTION` features provide metadata necessary for operation execution.
+  """
+  EXECUTION
+}
+
+type MachineLearning
+  @join__type(graph: BUSINESS_NODE, key: "id")
+{
+  id: ID!
+  personalized: String
+  userId: String
+  user: User
+}
+
+type Mutation
+  @join__type(graph: BUSINESS_NODE)
+  @join__type(graph: PROFILE_NODE)
+{
+  CreateMachineLearning(createMachineLearningInput: CreateMachineLearningInput!): MachineLearning! @join__field(graph: BUSINESS_NODE)
+  signUp(signUpInput: SignUpInput!): AuthResponse! @join__field(graph: PROFILE_NODE)
+  signIn(signInInput: SignInInput!): AuthResponse! @join__field(graph: PROFILE_NODE)
+}
+
+type Query
+  @join__type(graph: BUSINESS_NODE)
+  @join__type(graph: PROFILE_NODE)
+{
+  revalidateToken: AuthResponse!
+  GetMachineLearning(id: ID!): MachineLearning! @join__field(graph: BUSINESS_NODE)
+  Get_user_by_id(id: ID!): User! @join__field(graph: PROFILE_NODE)
+  Get_users_based_on_specified_roles_or_all_users_if_no_roles_are_provided(roles: [ValidRoles!] = []): [User!]! @join__field(graph: PROFILE_NODE)
+}
+
+input SignInInput
+  @join__type(graph: PROFILE_NODE)
+{
+  """The email of the user"""
+  email: String!
+
+  """The password of the user"""
+  password: String!
+}
+
+input SignUpInput
+  @join__type(graph: PROFILE_NODE)
+{
+  """The email of the user"""
+  email: String!
+
+  """The full name of the user"""
+  fullName: String!
+
+  """The password of the user"""
+  password: String!
+}
+
+type User
+  @join__type(graph: BUSINESS_NODE, key: "id", extension: true)
+  @join__type(graph: PROFILE_NODE, key: "id")
+{
+  id: ID!
+  machineLernings: [MachineLearning!]! @join__field(graph: BUSINESS_NODE)
+  fullName: String @join__field(graph: PROFILE_NODE)
+  email: String @join__field(graph: PROFILE_NODE)
+  password: String @join__field(graph: PROFILE_NODE)
+  roles: [String!]! @join__field(graph: PROFILE_NODE)
+  isActive: Boolean! @join__field(graph: PROFILE_NODE)
+  lastUpdatedBy: User @join__field(graph: PROFILE_NODE)
+}
+
+"""Valid Roles"""
+enum ValidRoles
+  @join__type(graph: PROFILE_NODE)
+{
+  ADMIN @join__enumValue(graph: PROFILE_NODE)
+  USER @join__enumValue(graph: PROFILE_NODE)
+  SUPER_ADMIN @join__enumValue(graph: PROFILE_NODE)
+}

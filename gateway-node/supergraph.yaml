@@ -1,0 +1,10 @@
+federation_version: =2.3.2
+subgraphs:
+  profile-node:
+    routing_url: https://y2jcxfppeg.execute-api.us-east-1.amazonaws.com/dev/graphql
+    schema:
+      subgraph_url: https://y2jcxfppeg.execute-api.us-east-1.amazonaws.com/dev/graphql
+  business-node:
+    routing_url: https://bhkxryxy00.execute-api.us-east-1.amazonaws.com/dev/graphql
+    schema:
+      subgraph_url: https://bhkxryxy00.execute-api.us-east-1.amazonaws.com/dev/graphql

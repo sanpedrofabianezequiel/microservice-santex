@@ -1,0 +1,23 @@
+services:
+  #business-node:
+   # container_name: business-node
+    #build:
+     # context: .
+      #dockerfile: ./business-node/Dockerfile
+      #target: development
+    #command: npm run start:dev business-node
+    #env_file:
+    #  - ./business-node/.env
+    #ports:
+    #  - '3002:3002'
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - '5432:5432'

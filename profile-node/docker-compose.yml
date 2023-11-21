@@ -1,0 +1,23 @@
+services:
+  #profile-node:
+   # container_name: profile-node
+    #build:
+     # context: .
+      #dockerfile: ./profile-node/Dockerfile
+      #target: development
+    #command: npm run start:dev profile-node
+    #env_file:
+    #  - ./profile-node/.env
+    #ports:
+    #  - '3002:3002'
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - '5432:5432'

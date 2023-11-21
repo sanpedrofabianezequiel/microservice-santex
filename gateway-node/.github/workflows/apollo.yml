@@ -1,0 +1,55 @@
+name: Generate Supergraph Schema
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+  pull_request:
+    branches:
+      - master
+      - dev
+    types: [opened, synchronize, edited]
+
+jobs:
+  generate-schema:
+    runs-on: ubuntu-latest
+    environment: apollo
+    #env:
+      #APOLLO_KEY: ${{secrets.APOLLO_KEY}}
+      #APOLLO_VCS_COMMIT: ${{github.event.pull_request.head.sha}}
+      #SUBGRAPH: ${{secrets.SUBGRAPH}}
+      #PORT: ${{secrets.PORT}}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Rover
+        run: |
+          curl -sSL https://rover.apollo.dev/nix/v0.10.0 | sh
+          echo "$HOME/.rover/bin" >> $GITHUB_PATH
+
+      - name: Get Supergraph Schema
+        run: |
+          rover supergraph compose --config ./supergraph.yaml --output plain --elv2-license=accept > ./prod-schema.graphql
+
+      #- name: Run check against PROD variant
+      # run: |
+      #  rover subgraph check ${{secrets.APOLLO_GRAPH_REF}} --name ${SUBGRAPH}  --schema ./src/schema.gql
+      #- name: Run check against DEV variant
+      # run: |
+      #  rover subgraph check ${{secrets.APOLLO_GRAPH_REF_DEV}} --name ${SUBGRAPH}  --schema ./src/schema.gql
+      #- name: Run check against STAGING variant
+      # run: |
+      #  rover subgraph check ${{secrets.APOLLO_GRAPH_REF_STAGING}} --name ${SUBGRAPH}  --schema ./src/schema.gql
+
+      #- name: Run publish to dev
+      #  run: |
+      #    rover subgraph publish ${{secrets.APOLLO_GRAPH_REF_DEV}} --name ${SUBGRAPH}  --schema ./src/schema.gql --routing-url http://localhost:${PORT} --convert
+
+      #- name: Run publish to staging
+      #  run: |
+      #    rover subgraph publish ${{secrets.APOLLO_GRAPH_REF_STAGING}} --name ${SUBGRAPH}  --schema ./src/schema.gql --routing-url http://localhost:${PORT} --convert
+
+      #- name: Run publish to prod
+      #  run: |
+      #    rover subgraph publish ${{secrets.APOLLO_GRAPH_REF}} --name ${SUBGRAPH}  --schema ./src/schema.gql --routing-url http://localhost:${PORT} --convert
