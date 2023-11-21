@@ -1,4 +1,4 @@
-# Nombre del Proyecto
+# Challenge Proyecto
 
 Este proyecto consiste en un sistema de microservicios compuesto por dos servicios individuales y un API Gateway, desarrollado para ser utilizado localmente y desplegado en el entorno de Amazon Web Services (AWS) utilizando AWS Lambda. El repositorio incluye un archivo Docker para facilitar el despliegue de la base de datos local y scripts preparados para CI/CD.
 
@@ -73,4 +73,4 @@ Las aplicaciones deben ser iniciadas en el siguiente orden:
 Se recomienda iniciar cada aplicación utilizando los comandos específicos detallados en el archivo package.json.
 
 Notas Finales
-Este proyecto se ha desarrollado siguiendo las mejores prácticas de arquitectura de microservicios y está diseñado para mostrar la implementación de un sistema escalable y robusto. Si tienes alguna pregunta o sugerencia para mejorar este proyecto, no dudes en contactarnos. Tu retroalimentación es valiosa para seguir mejorando
+Este proyecto se ha desarrollado siguiendo las mejores prácticas de arquitectura de microservicios y está diseñado para mostrar la implementación de un sistema escalable y robusto. Si tienes alguna pregunta o sugerencia para mejorar este proyecto, no dudes en contactarme. Tu retroalimentación es valiosa para seguir mejorando
